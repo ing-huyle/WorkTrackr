@@ -84,6 +84,11 @@ button {
 .small {
   font-size: 14px;
   padding: 8px 14px;
+  min-width: 82px;
+}
+
+.filler {
+  visibility: hidden;
 }
 
 label {

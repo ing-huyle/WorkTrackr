@@ -161,13 +161,14 @@ const App = () => {
         <span className='time-worked'>{getHours(timeWorked)}:{getMinutes(timeWorked)}:{getSeconds(timeWorked)}</span>
         <div className='mid-buttons-wrapper'>
           {
-            timeWorked > 0 && !isRunning &&
-            <button
-              className='secondary small'
-              onClick={() => deductFifteen()}
-            >
-              - 15 min
-            </button>
+            timeWorked > 900 && !isRunning
+              ? <button
+                  className='secondary small'
+                  onClick={() => deductFifteen()}
+                >
+                  - 15 min
+                </button>
+              : <button className='small filler'></button>
           }
           <button
             className='primary'
