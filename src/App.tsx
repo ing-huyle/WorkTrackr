@@ -168,7 +168,7 @@ const App = () => {
                 >
                   - 15 min
                 </button>
-              : <button className='small filler'></button>
+              : timeWorked > 0 && !isRunning && <button className='small filler'></button>
           }
           <button
             className='primary'
