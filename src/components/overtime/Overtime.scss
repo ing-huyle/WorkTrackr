@@ -7,8 +7,14 @@
   gap: 5px;
 
   .overtime {
-    font-size: 2em;
+    font-family: 'Chivo Mono', monospace;
+    font-size: 1.6em;
     font-weight: 100;
+    color: $common-text;
+  }
+
+  .positive {
+    color: $green-text;
   }
 
   .negative {

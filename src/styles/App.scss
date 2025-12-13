@@ -22,9 +22,14 @@ main {
   margin-top: -100px;
 
   .time-worked {
-    font-size: 5em;
+    font-family: 'Chivo Mono', monospace;
+    font-size: 4.2em;
     font-weight: 100;
   }
+}
+
+footer {
+  min-height: 69px;
 }
 
 .daily-target-wrapper {
@@ -34,13 +39,22 @@ main {
   gap: 8px;
 }
 
-// Buttons
+.mid-buttons-wrapper {
+  display: flex;;
+  align-items: center;
+  gap: 24px;
+}
+
 button {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
   max-width: 200px;
+  font-size: 18px;
+  padding: 10px 24px 10px 16px;
+  border: none;
+  border-radius: 100px;
 
   &:hover {
     cursor: pointer;
@@ -52,15 +66,26 @@ button {
 }
 
 .primary {
-  font-size: 18px;
   color: $primary-text;
   background-color: $primary;
-  padding: 9px 24px 10px 16px;
-  border: none;
-  border-radius: 100px;
+  
 }
 
-// Label
+.secondary {
+  font-weight: 200;
+  color: $common-text;
+  background-color: $secondary;
+
+  path {
+    fill: white;
+  }
+}
+
+.small {
+  font-size: 14px;
+  padding: 8px 14px;
+}
+
 label {
   font-size: 14px;
   font-weight: 300;
