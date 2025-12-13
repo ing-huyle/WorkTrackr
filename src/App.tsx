@@ -6,11 +6,12 @@ import Overtime from './components/overtime/Overtime';
 import Switch from './components/switch/Switch';
 
 const App = () => {
-  const defaultWorkOvertimeToday = -30600;
+  const secretDefaultWorkOvertimeToday = -30600;
   
   const [whatsToday, setWhatsToday] = useState<WhatsToday>('work');
-  const [overtimeToday, setOvertimeToday] = useState<number>(defaultWorkOvertimeToday);
-  const [overtimeTotal, setOvertimeTotal] = useState<number>(defaultWorkOvertimeToday);
+  const [defaultOvertimeToday, setDefaultOvertimeToday] = useState<number>(secretDefaultWorkOvertimeToday);
+  const [overtimeToday, setOvertimeToday] = useState<number>(secretDefaultWorkOvertimeToday);
+  const [overtimeTotal, setOvertimeTotal] = useState<number>(secretDefaultWorkOvertimeToday);
   const [timeWorked, setTimeWorked] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [ticking, setTicking] = useState<any>(null);
@@ -21,11 +22,15 @@ const App = () => {
     setWhatsToday(newWhatsToday);
     localStorage.setItem('whatsToday', newWhatsToday);
     
-    const newOvertimeToday = Number(localStorage.getItem('overtimeToday')) ?? (newWhatsToday === 'work' ? defaultWorkOvertimeToday : 0);
+    const newDefaultOvertimeToday = Number(localStorage.getItem('defaultOvertimeToday') ?? secretDefaultWorkOvertimeToday);
+    setDefaultOvertimeToday(newDefaultOvertimeToday);
+    localStorage.setItem('defaultOvertimeToday', String(newDefaultOvertimeToday));
+
+    const newOvertimeToday = Number(localStorage.getItem('overtimeToday') ?? (newWhatsToday === 'work' ? newDefaultOvertimeToday : 0));
     setOvertimeToday(newOvertimeToday);
     localStorage.setItem('overtimeToday', String(newOvertimeToday));
 
-    const newOvertimeTotal = Number(localStorage.getItem('overtimeTotal') ?? defaultWorkOvertimeToday);
+    const newOvertimeTotal = Number(localStorage.getItem('overtimeTotal')) + newOvertimeToday;
     setOvertimeTotal(newOvertimeTotal);
     localStorage.setItem('overtimeTotal', String(newOvertimeTotal));
 
@@ -120,19 +125,19 @@ const App = () => {
     setWhatsToday(type);
     localStorage.setItem('whatsToday', type);
 
-    const newOvertimeToday = type === 'rest' ? 0 : defaultWorkOvertimeToday;
+    const newOvertimeToday = type === 'rest' ? 0 : defaultOvertimeToday;
     setOvertimeToday(newOvertimeToday);
     localStorage.setItem('overtimeToday', String(newOvertimeToday));
 
     setOvertimeTotal(prev => {
-      const newOvertimeTotal = prev + (type === 'rest' ? -defaultWorkOvertimeToday : defaultWorkOvertimeToday);
+      const newOvertimeTotal = prev + (type === 'rest' ? -defaultOvertimeToday : defaultOvertimeToday);
       localStorage.setItem('overtimeToday', String(newOvertimeTotal));
       return newOvertimeTotal;
     });
   }
 
   const startNewDay = () => {
-    const newOvertimeToday = whatsToday === 'rest' ? 0 : defaultWorkOvertimeToday;
+    const newOvertimeToday = whatsToday === 'rest' ? 0 : defaultOvertimeToday;
     setOvertimeToday(newOvertimeToday);
     localStorage.setItem('overtimeToday', String(newOvertimeToday));
 
