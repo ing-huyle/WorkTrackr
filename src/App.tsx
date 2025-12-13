@@ -21,7 +21,7 @@ const App = () => {
     setWhatsToday(newWhatsToday);
     localStorage.setItem('whatsToday', newWhatsToday);
     
-    const newOvertimeToday = newWhatsToday === 'work' ? defaultWorkOvertimeToday : 0;
+    const newOvertimeToday = Number(localStorage.getItem('overtimeToday')) ?? (newWhatsToday === 'work' ? defaultWorkOvertimeToday : 0);
     setOvertimeToday(newOvertimeToday);
     localStorage.setItem('overtimeToday', String(newOvertimeToday));
 
