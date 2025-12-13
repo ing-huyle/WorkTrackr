@@ -6,17 +6,20 @@ export const getTimeColor = (overtime: number): OvertimeColor => {
 }
 
 export const getSign = (time: number): string => {
-  return (time > -1 && time < 60) ? '' : time >= 60 ? '+' : '-'
+  if (time > -1 && time < 60) return '';
+  return time >= 60 ? '+' : '-';
 }
 
+const getTotalMinutes = (time: number): number => Math.floor(time / 60);
+
 export const getHours = (time: number): string => {
-  const totalMinutes = Math.floor(time / 60);
+  const totalMinutes = getTotalMinutes(time);
   const hours = Math.floor(Math.abs(totalMinutes) / 60);
   return twoDigits(hours);
 };
 
 export const getMinutes = (time: number): string => {
-  const totalMinutes = Math.floor(time / 60);
+  const totalMinutes = getTotalMinutes(time);
   const minutes = Math.abs(totalMinutes % 60);
   return twoDigits(minutes);
 };
@@ -26,3 +29,15 @@ export const getSeconds = (time: number): string => {
 }
 
 export const twoDigits = (n: number) => String(n).padStart(2, '0');
+
+export const loadNumber = (key: string, fallback: number): number => {
+  const raw = localStorage.getItem(key);
+  if (raw === null) return fallback;
+
+  const parsed = Number(raw);
+  return Number.isFinite(parsed) ? parsed : fallback;
+};
+
+export const persistNumber = (key: string, value: number): void => {
+  localStorage.setItem(key, String(value));
+};

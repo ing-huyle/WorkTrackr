@@ -6,7 +6,9 @@ const Overtime = ({ label, overtime, color }: OvertimeType) => {
   return (
     <div className='overtime-wrapper'>
       <label>{label}</label>
-      <span className={'overtime ' + color}>{getSign(overtime)}{getHours(overtime)}:{getMinutes(overtime)}</span>
+      <span className={`overtime ${color ?? ''}`}>
+        {getSign(overtime)}{getHours(overtime)}:{getMinutes(overtime)}
+      </span>
     </div>
   )
 }

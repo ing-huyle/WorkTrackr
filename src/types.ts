@@ -7,3 +7,8 @@ export interface OvertimeType {
 }
 
 export type WhatsToday = 'work' | 'rest';
+
+export interface SwitchProps {
+  whatsToday: WhatsToday;
+  clickWhatsToday: (whatsToday: WhatsToday) => void;
+}
