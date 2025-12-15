@@ -20,19 +20,14 @@ const FIFTEEN_MINUTES = 15 * 60;
 
 const App = () => {
   const [whatsToday, setWhatsToday] = useState<WhatsToday>('work');
-  const [defaultOvertimeToday, setDefaultOvertimeToday] = useState<number>(
-    SECRET_DEFAULT_WORK_OVERTIME_TODAY
-  );
-  const [overtimeToday, setOvertimeToday] = useState<number>(
-    SECRET_DEFAULT_WORK_OVERTIME_TODAY
-  );
-  const [overtimeTotal, setOvertimeTotal] = useState<number>(
-    SECRET_DEFAULT_WORK_OVERTIME_TODAY
-  );
+  const [defaultOvertimeToday, setDefaultOvertimeToday] = useState<number>(SECRET_DEFAULT_WORK_OVERTIME_TODAY);
+  const [overtimeToday, setOvertimeToday] = useState<number>(SECRET_DEFAULT_WORK_OVERTIME_TODAY);
+  const [overtimeTotal, setOvertimeTotal] = useState<number>(SECRET_DEFAULT_WORK_OVERTIME_TODAY);
   const [timeWorked, setTimeWorked] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const hiddenAtRef = useRef<number | null>(null);
 
   // Initial load from localStorage
   useEffect(() => {
@@ -65,6 +60,7 @@ const App = () => {
     persistNumber(STORAGE_KEYS.TIME_WORKED, initialTimeWorked);
   }, []);
 
+
   // Apply a delta (in seconds) to overtimeToday, overtimeTotal, timeWorked
   const applyDelta = useCallback((deltaSeconds: number) => {
     setOvertimeToday(prev => {
@@ -90,13 +86,17 @@ const App = () => {
     applyDelta(1);
   }, [applyDelta]);
 
+
   // Interval management
   useEffect(() => {
     if (isRunning) {
       intervalRef.current = setInterval(tick, ONE_SECOND);
-    } else if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      hiddenAtRef.current = null;
     }
 
     return () => {
@@ -107,6 +107,42 @@ const App = () => {
     };
   }, [isRunning, tick]);
 
+  // Listen for the tab being hidden/visible
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!isRunning) return;
+
+      if (document.visibilityState === 'hidden') {
+        hiddenAtRef.current = Date.now();
+
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
+      } else if (document.visibilityState === 'visible' && hiddenAtRef.current != null) {
+        const diffMs = Date.now() - hiddenAtRef.current;
+        const deltaSeconds = Math.floor(diffMs / 1000);
+
+        if (deltaSeconds > 0) {
+          applyDelta(deltaSeconds);
+        }
+
+        hiddenAtRef.current = null;
+
+        if (!intervalRef.current) {
+          intervalRef.current = setInterval(tick, ONE_SECOND);
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [applyDelta, isRunning, tick]);
+
+
+  // Click actions
   const toggleRunning = (): void => {
     setIsRunning(prev => !prev);
   };
