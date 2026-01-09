@@ -50,8 +50,7 @@ const App = () => {
     setOvertimeToday(initialOvertimeToday);
     persistNumber(STORAGE_KEYS.OVERTIME_TODAY, initialOvertimeToday);
 
-    const initialOvertimeTotal =
-      loadNumber(STORAGE_KEYS.OVERTIME_TOTAL, 0) + initialOvertimeToday;
+    const initialOvertimeTotal = loadNumber(STORAGE_KEYS.OVERTIME_TOTAL, overtimeTotal);
     setOvertimeTotal(initialOvertimeTotal);
     persistNumber(STORAGE_KEYS.OVERTIME_TOTAL, initialOvertimeTotal);
 
