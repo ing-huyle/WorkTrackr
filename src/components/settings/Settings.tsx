@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import './Settings.scss';
 import { STORAGE_KEYS } from '../../config';
-import { hmToSeconds, persistNumber, signedHmToSeconds, splitSecondsToHm, splitSignedSecondsToHm } from '../../utils/utils';
+import { clamp, hmToSeconds, persistNumber, signedHmToSeconds, splitSecondsToHm, splitSignedSecondsToHm } from '../../utils/utils';
 import type { SettingsDialogProps } from '../../types';
 
 const SettingsDialog = ({
@@ -25,9 +25,9 @@ const SettingsDialog = ({
   const aHM = useMemo(() => splitSecondsToHm(tmpA), [tmpA]);
   const bHM = useMemo(() => splitSignedSecondsToHm(tmpB), [tmpB]);
 
-  const updateTmpAFromHm = (nextH: number, nextM: number) => {
+  const updateTmpAFromHm = (type: 'h' | 'm', nextH: number, nextM: number) => {
     const prevA = tmpA;
-    const nextA = hmToSeconds(nextH, nextM);
+    const nextA = clamp(hmToSeconds(nextH, nextM), 0, (type ? 23 * 3600 + 59 * 60 : 59 * 60));
 
     // Changing daily target changes total overtime too
     const delta = prevA - nextA;
@@ -74,7 +74,7 @@ const SettingsDialog = ({
                 min={0}
                 max={23}
                 value={aHM.h}
-                onChange={(e) => updateTmpAFromHm(Number(e.target.value), aHM.m)}
+                onChange={(e) => updateTmpAFromHm('h', Number(e.target.value), aHM.m)}
               />
               :
               <input
@@ -82,7 +82,7 @@ const SettingsDialog = ({
                 min={0}
                 max={59}
                 value={aHM.m}
-                onChange={(e) => updateTmpAFromHm(aHM.h, Number(e.target.value))}
+                onChange={(e) => updateTmpAFromHm('m', aHM.h, Number(e.target.value))}
               />
             </div>
           </div>
@@ -109,6 +109,7 @@ const SettingsDialog = ({
               <input
                 type='number'
                 min={0}
+                max={99}
                 value={bHM.h}
                 onChange={(e) =>
                   updateTmpBFromSignedHm(
@@ -143,7 +144,7 @@ const SettingsDialog = ({
               value={tmpIncrement}
               min={1}
               max={60}
-              onChange={(e) => setTmpIncrement(Number(e.target.value))}
+              onChange={(e) => setTmpIncrement(clamp(Number(e.target.value), 1, 60))}
             />
           </label>
         </div>

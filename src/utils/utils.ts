@@ -56,7 +56,7 @@ export const splitSignedSecondsToHm = (totalSeconds: number) => {
 export const signedHmToSeconds = (sign: 1 | -1, h: number, m: number) => {
   const hh = Math.max(0, Math.trunc(h));
   const mm = Math.min(59, Math.max(0, Math.trunc(m)));
-  return sign * (hh * 3600 + mm * 60);
+  return sign * clamp(hh * 3600 + mm * 60, 0, 359940);
 };
 
 
