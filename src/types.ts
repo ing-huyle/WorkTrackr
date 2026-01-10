@@ -17,6 +17,8 @@ export type SettingsDialogProps = {
   isOpen: boolean;
   toggleSettings: () => void;
 
+  whatsToday: WhatsToday;
+
   defaultOvertimeToday: number;
   setDefaultOvertimeToday: (v: number) => void;
 

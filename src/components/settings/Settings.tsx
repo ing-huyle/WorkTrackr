@@ -5,7 +5,8 @@ import { clamp, hmToSeconds, persistNumber, signedHmToSeconds, splitSecondsToHm,
 import type { SettingsDialogProps } from '../../types';
 
 const SettingsDialog = ({
-  isOpen, toggleSettings, defaultOvertimeToday, setDefaultOvertimeToday,
+  isOpen, toggleSettings, whatsToday,
+  defaultOvertimeToday, setDefaultOvertimeToday,
   overtimeToday, setOvertimeToday, overtimeTotal, setOvertimeTotal,
   increment, setIncrement
 }: SettingsDialogProps) => {
@@ -32,7 +33,7 @@ const SettingsDialog = ({
     // Changing daily target changes total overtime too
     const delta = prevA - nextA;
     setTmpA(nextA);
-    setTmpB(prev => prev + delta);
+    setTmpB(prev => whatsToday === 'work' ? prev + delta : prev);
   };
 
   const updateTmpBFromSignedHm = (sign: 1 | -1, h: number, m: number) => {
@@ -42,7 +43,7 @@ const SettingsDialog = ({
   const save = () => {
     const oldTarget = -defaultOvertimeToday;
     const targetDelta = oldTarget - tmpA;
-    const newOvertimeToday = overtimeToday + targetDelta;
+    const newOvertimeToday = whatsToday === 'work' ? overtimeToday + targetDelta : 0;
     
     setDefaultOvertimeToday(-tmpA);
     setOvertimeToday(newOvertimeToday);
