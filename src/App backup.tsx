@@ -18,7 +18,7 @@ const App = () => {
   const [isSettingsOn, setIsSettingsOn] = useState(false);
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const lastSyncRef = useRef<number | null>(null);
+  const hiddenAtRef = useRef<number | null>(null);
   const baseTitleRef = useRef<string>('');
 
   // Initial load from localStorage
@@ -79,73 +79,64 @@ const App = () => {
     });
   }, []);
 
-  // Sync
-  const syncTime = useCallback(() => {
-    if (!isRunning) return;
+  const tick = useCallback(() => {
+    applyDelta(1);
+  }, [applyDelta]);
 
-    const now = Date.now();
 
-    // initialize on first run
-    if (lastSyncRef.current == null) {
-      lastSyncRef.current = now;
-      return;
-    }
-
-    const diffMs = now - lastSyncRef.current;
-    const deltaSeconds = Math.floor(diffMs / 1000);
-
-    if (deltaSeconds > 0) {
-      applyDelta(deltaSeconds);
-      // keep alignment so we don't drift / double count partial seconds
-      lastSyncRef.current += deltaSeconds * 1000;
-    }
-  }, [isRunning, applyDelta]);
-
-  // Interval
+  // Interval management
   useEffect(() => {
-    // cleanup always
-    const stop = () => {
+    if (isRunning) {
+      intervalRef.current = setInterval(tick, ONE_SECOND);
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      hiddenAtRef.current = null;
+    }
+
+    return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
     };
+  }, [isRunning, tick]);
 
-    if (!isRunning) {
-      stop();
-      lastSyncRef.current = null;
-      return stop;
-    }
-
-    // start/resume
-    lastSyncRef.current = Date.now();
-    stop();
-    intervalRef.current = setInterval(syncTime, ONE_SECOND);
-
-    return stop;
-  }, [isRunning, syncTime]);
-
-  // Visibility
+  // Listen for the tab being hidden/visible
   useEffect(() => {
-    const onVis = () => {
+    const handleVisibilityChange = () => {
       if (!isRunning) return;
 
       if (document.visibilityState === 'hidden') {
-        // reset anchor so the next visible sync counts from "now"
-        lastSyncRef.current = Date.now();
-        return;
-      }
+        hiddenAtRef.current = Date.now();
 
-      if (document.visibilityState === 'visible') {
-        syncTime(); // immediate catch-up
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
+      } else if (document.visibilityState === 'visible' && hiddenAtRef.current != null) {
+        const diffMs = Date.now() - hiddenAtRef.current;
+        const deltaSeconds = Math.floor(diffMs / 1000);
+
+        if (deltaSeconds > 0) applyDelta(deltaSeconds);
+
+        hiddenAtRef.current = null;
+
+        if (!intervalRef.current) {
+          intervalRef.current = setInterval(tick, ONE_SECOND);
+        }
       }
     };
 
-    document.addEventListener('visibilitychange', onVis);
-    return () => document.removeEventListener('visibilitychange', onVis);
-  }, [isRunning, syncTime]);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [applyDelta, isRunning, tick]);
 
-  // Tab title
+  // Write time worked in the tab
   useEffect(() => {
     const hh = getHours(timeWorked);
     const mm = getMinutes(timeWorked);
