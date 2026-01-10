@@ -117,3 +117,10 @@ label {
   font-weight: 300;
   color: $grey-text;
 }
+
+@media (max-width: 480px) {
+  .settings-btn {
+    top: 10px;
+    right: 10px;
+  }
+}
