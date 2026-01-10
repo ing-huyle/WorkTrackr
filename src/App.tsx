@@ -353,6 +353,8 @@ const App = () => {
           </button>
         )}
       </footer>
+
+      <p className='identity'>Coded by <a href='https://www.linkedin.com/in/ing-huyle' target='_blank'>ing<span>.</span>huyle</a></p>
     </>
   );
 };

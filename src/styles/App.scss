@@ -6,7 +6,7 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding-block: 60px;
+  padding-block: 60px 80px;
   position: relative;
 }
 
@@ -118,7 +118,51 @@ label {
   color: $grey-text;
 }
 
+.identity {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  font-family: 'Share Tech Mono', sans;
+  font-size: 12px;
+  font-weight: 100;
+  color: $grey-text;
+  text-align: center;
+  line-height: 1.4;
+  margin-top: 20px;
+
+  a {
+    font-family: inherit;
+    text-decoration: none;
+    color: #FAFAFA;
+    opacity: .7;
+    padding-bottom: 1px;
+    border-radius: 2px;
+    border-bottom: 0.25em solid #FFD000;
+
+    &:hover {
+      opacity: 1;
+
+      span {
+        opacity: 1;
+      }
+    }
+
+    span {
+      color: #FFD000;
+      opacity: .7;
+      font-size: 1.5em;
+      font-weight: 700;
+    }
+  }
+}
+
 @media (max-width: 480px) {
+  #root {
+    padding-block: 60px;
+  }
+  
   .settings-btn {
     top: 10px;
     right: 10px;
