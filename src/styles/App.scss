@@ -7,6 +7,23 @@
   justify-content: space-between;
   align-items: center;
   padding-block: 60px;
+  position: relative;
+}
+
+.settings-btn {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border-radius: 100px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
 }
 
 .overtimes-wrapper {
@@ -68,7 +85,6 @@ button {
 .primary {
   color: $primary-text;
   background-color: $primary;
-  
 }
 
 .secondary {
@@ -79,6 +95,11 @@ button {
   path {
     fill: white;
   }
+}
+
+.tertiary-light {
+  color: $common-text-light;
+  background-color: $background-light;
 }
 
 .small {

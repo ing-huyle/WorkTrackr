@@ -1,0 +1,101 @@
+@use '../../styles/index' as *;
+
+.settings-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+
+  .settings-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+  }
+
+  .settings-dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: $background-light;
+    max-width: 235px;
+    padding: 20px 25px;
+    border-radius: 20px;
+    z-index: 1;
+  }
+}
+
+.inputs-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: $grey-text-light;
+  }
+
+  .hm-label {
+    margin-bottom: 4px;
+  }
+
+  .hm-inputs {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    color: $grey-text-light;
+  }
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+input, select {
+  color: $common-text-light;
+  height: 40px;
+  width: 43px;
+  padding: 0 12px;
+  text-align: center;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #DFCDCD;
+  background: white;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &:focus {
+    border: 1px solid #000000;
+  }
+}
+
+input[type="number"]::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* Chrome, Safari, Edge */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+select {
+  width: initial;
+}
+
+.btns-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}

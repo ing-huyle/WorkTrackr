@@ -1,6 +1,7 @@
 $hover: .96;
 
 $background: #1E1E1E;
+$background-light: #FAFAFA;
 
 $primary: #FFDD00;
 $secondary: #3F3F3F;
@@ -10,6 +11,10 @@ $common-text: #FFFFFF;
 $grey-text: #AFAFAF;
 $red-text: #DD7F7F;
 $green-text: #79BB88;
+
+$primary-text-light: #FFFFFF;
+$common-text-light: #000000;
+$grey-text-light: #676F7E;
 
 *, *::before, *::after {
   padding: 0;
