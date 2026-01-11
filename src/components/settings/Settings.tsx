@@ -59,10 +59,12 @@ const SettingsDialog = ({
   };
 
   return (
-    <div className='settings-wrapper'>
+    <div className={`settings-wrapper ${isOpen ? 'open' : ''}`}>
       <div className='settings-backdrop' />
 
       <div className='settings-dialog' role='dialog'>
+        <h2>Settings</h2>
+
         <div className='inputs-wrapper'>
           
           {/* Daily target */}

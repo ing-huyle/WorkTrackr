@@ -86,6 +86,7 @@ button {
 .primary {
   color: $primary-text;
   background-color: $primary;
+  transition: filter .3s ease;
 
   &:hover {
     filter: brightness(.9);
@@ -142,6 +143,7 @@ label {
     text-decoration: none;
     color: #FAFAFA;
     opacity: .7;
+    transition: opacity .3s ease;
     padding-bottom: 1px;
     border-radius: 2px;
     border-bottom: 0.25em solid #FFD000;
@@ -157,6 +159,7 @@ label {
     span {
       color: #FFD000;
       opacity: .7;
+      transition: opacity .3s ease;
       font-size: 1.5em;
       font-weight: 700;
     }

@@ -4,6 +4,9 @@
   position: fixed;
   inset: 0;
   z-index: 5000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s ease;
 
   .settings-backdrop {
     position: absolute;
@@ -22,6 +25,18 @@
     border-radius: 20px;
     z-index: 1;
   }
+}
+
+.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+h2 {
+  color: $primary-text;
+  font-weight: 400;
+  font-size: 22px;
+  margin-bottom: 10px;
 }
 
 .inputs-wrapper {
