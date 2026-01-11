@@ -86,6 +86,10 @@ button {
 .primary {
   color: $primary-text;
   background-color: $primary;
+
+  &:hover {
+    filter: brightness(.9);
+  }
 }
 
 .secondary {
