@@ -10,6 +10,87 @@
   position: relative;
 }
 
+
+// LOADING SCREEN
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: $background;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: splashFadeIn .3s ease;
+}
+
+.splash-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -10%;
+}
+
+.splash-title {
+  font-size: 32px;
+  font-weight: 600;
+  font-family: 'Share Tech Mono', sans;
+}
+
+.identity-loading {
+  font-family: 'Share Tech Mono', sans;
+  font-size: 12px;
+  font-weight: 100;
+  color: $grey-text;
+  text-align: center;
+  line-height: 1.4;
+  // margin-top: 20px;
+
+  a {
+    font-family: inherit;
+    text-decoration: none;
+    color: #FAFAFA;
+    transition: opacity .3s ease;
+    padding-bottom: 1px;
+    border-radius: 2px;
+    border-bottom: 0.25em solid #FFD000;
+
+    span {
+      color: #FFD000;
+      // opacity: .7;
+      transition: opacity .3s ease;
+      font-size: 1.5em;
+      font-weight: 700;
+    }
+  }
+}
+
+.loader {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: $primary;
+  animation: spin 0.9s linear infinite;
+  margin-top: 40px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes splashFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+// SETTINGS
 .settings-btn {
   position: absolute;
   top: 20px;
@@ -26,6 +107,8 @@
   }
 }
 
+
+// MAIN SCREEN
 .overtimes-wrapper {
   display: flex;
   gap: 100px;
@@ -63,6 +146,8 @@ footer {
   gap: 24px;
 }
 
+
+// UI COMPONENTS
 button {
   display: flex;
   justify-content: center;
@@ -124,6 +209,8 @@ label {
   color: $grey-text;
 }
 
+
+// IDENTITY
 .identity {
   position: absolute;
   bottom: 20px;
@@ -166,6 +253,8 @@ label {
   }
 }
 
+
+// RESPONSIVITY
 @media (max-width: 480px) {
   #root {
     padding-block: 60px;

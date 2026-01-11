@@ -8,6 +8,7 @@ import Switch from './components/switch/Switch';
 import SettingsDialog from './components/settings/Settings';
 
 const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [whatsToday, setWhatsToday] = useState<WhatsToday>('work');
   const [defaultOvertimeToday, setDefaultOvertimeToday] = useState<number>(SECRET_DEFAULT_WORK_OVERTIME_TODAY);
   const [overtimeToday, setOvertimeToday] = useState<number>(SECRET_DEFAULT_WORK_OVERTIME_TODAY);
@@ -21,7 +22,7 @@ const App = () => {
   const lastSyncRef = useRef<number | null>(null);
   const baseTitleRef = useRef<string>('');
 
-  // Initial load from localStorage
+  // Initial load
   useEffect(() => {
     const storedWhatsToday =
       (localStorage.getItem(STORAGE_KEYS.WHATS_TODAY) as WhatsToday | null) ?? 'work';
@@ -55,6 +56,9 @@ const App = () => {
     persistNumber(STORAGE_KEYS.INCREMENT, storedIncrement);
 
     baseTitleRef.current = document.title;
+
+    const t = setTimeout(() => setIsLoading(false), 1200);
+    return () => clearTimeout(t);
   }, []);
 
 
@@ -131,7 +135,7 @@ const App = () => {
       if (!isRunning) return;
 
       if (document.visibilityState === 'hidden') {
-        // reset anchor so the next visible sync counts from "now"
+        // reset anchor so the next visible sync counts from 'now'
         lastSyncRef.current = Date.now();
         return;
       }
@@ -226,6 +230,29 @@ const App = () => {
 
   return (
     <>
+      {/* LOADING SCREEN */}
+      {
+        isLoading && 
+        <div className='splash-screen'>
+          <div className='splash-content'>
+            <h1 className='splash-title'>WorkTrackr</h1>
+
+            <p className='identity-loading'>
+              by{' '}
+              <a
+                href='https://www.linkedin.com/in/ing-huyle'
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                ing<span>.</span>huyle
+              </a>
+            </p>
+
+            <div className='loader' />
+          </div>
+        </div>
+      }
+      
       {/* SETTINGS */}
       {
         !isRunning &&
@@ -242,21 +269,18 @@ const App = () => {
         
       }
       <SettingsDialog
-            isOpen={isSettingsOn}
-            toggleSettings={toggleSettings}
-            whatsToday={whatsToday}
-            defaultOvertimeToday={defaultOvertimeToday}
-            setDefaultOvertimeToday={setDefaultOvertimeToday}
-            overtimeToday={overtimeToday}
-            setOvertimeToday={setOvertimeToday}
-            overtimeTotal={overtimeTotal}
-            setOvertimeTotal={setOvertimeTotal}
-            increment={increment}
-            setIncrement={setIncrement}
-          />
-      
-          
-      
+        isOpen={isSettingsOn}
+        toggleSettings={toggleSettings}
+        whatsToday={whatsToday}
+        defaultOvertimeToday={defaultOvertimeToday}
+        setDefaultOvertimeToday={setDefaultOvertimeToday}
+        overtimeToday={overtimeToday}
+        setOvertimeToday={setOvertimeToday}
+        overtimeTotal={overtimeTotal}
+        setOvertimeTotal={setOvertimeTotal}
+        increment={increment}
+        setIncrement={setIncrement}
+      />
 
 
       {/* OVERTIMES */}
@@ -355,7 +379,9 @@ const App = () => {
         )}
       </footer>
 
-      <p className='identity'>Coded by <a href='https://www.linkedin.com/in/ing-huyle' target='_blank'>ing<span>.</span>huyle</a></p>
+      <p className='identity'>
+        Coded by <a href='https://www.linkedin.com/in/ing-huyle' target='_blank'>ing<span>.</span>huyle</a>
+      </p>
     </>
   );
 };
