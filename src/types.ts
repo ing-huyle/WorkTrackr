@@ -30,4 +30,7 @@ export type SettingsDialogProps = {
 
   increment: number;
   setIncrement: (v: number) => void;
+
+  showTimeTab: boolean;
+  setShowTimeTab: (v: boolean) => void;
 };

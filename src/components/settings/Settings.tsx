@@ -8,7 +8,7 @@ const SettingsDialog = ({
   isOpen, toggleSettings, whatsToday,
   defaultOvertimeToday, setDefaultOvertimeToday,
   overtimeToday, setOvertimeToday, overtimeTotal, setOvertimeTotal,
-  increment, setIncrement
+  increment, setIncrement, showTimeTab, setShowTimeTab
 }: SettingsDialogProps) => {
   const [tmpA, setTmpA] = useState(-defaultOvertimeToday);
   const [tmpB, setTmpB] = useState(overtimeTotal);
@@ -69,7 +69,7 @@ const SettingsDialog = ({
           
           {/* Daily target */}
           <div className='hm-row'>
-            <label className='hm-label'>Daily target</label>
+            <label className='hm-label label-input'>Daily target</label>
 
             <div className='hm-inputs'>
               <input
@@ -92,7 +92,7 @@ const SettingsDialog = ({
 
           {/* Total overtime */}
           <div className='hm-row'>
-            <label className='hm-label'>Rewrite total overtime</label>
+            <label className='hm-label label-input'>Rewrite total overtime</label>
 
             <div className='hm-inputs'>
               <select
@@ -140,7 +140,7 @@ const SettingsDialog = ({
           </div>
 
           {/* Increment */}
-          <label>
+          <label className='label-input'>
             Increment (min)
             <input
               type='number'
@@ -149,6 +149,17 @@ const SettingsDialog = ({
               max={60}
               onChange={(e) => setTmpIncrement(clamp(Number(e.target.value), 1, 60))}
             />
+          </label>
+
+          {/* Time in tab title */}
+          <label className='label-toggle-switch'>
+            Show time in tab title
+            <input
+              type='checkbox'
+              checked={showTimeTab}
+              onChange={(e) => setShowTimeTab(e.target.checked)}
+            />
+            <span className='slider'></span>
           </label>
         </div>
 
