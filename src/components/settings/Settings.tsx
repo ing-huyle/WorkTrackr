@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import './Settings.scss';
 import { STORAGE_KEYS } from '../../config';
-import { clamp, hmToSeconds, persistNumber, signedHmToSeconds, splitSecondsToHm, splitSignedSecondsToHm } from '../../utils/utils';
+import { clamp, hmToSeconds, set, signedHmToSeconds, splitSecondsToHm, splitSignedSecondsToHm } from '../../utils/utils';
 import type { SettingsDialogProps } from '../../types';
 
 const SettingsDialog = ({
@@ -13,6 +13,7 @@ const SettingsDialog = ({
   const [tmpA, setTmpA] = useState(-defaultOvertimeToday);
   const [tmpB, setTmpB] = useState(overtimeTotal);
   const [tmpIncrement, setTmpIncrement] = useState(increment);
+  const [tmpShowTimeTab, setTmpShowTimeTab] = useState(showTimeTab);
 
   // Sync temp state when dialog opens
   useEffect(() => {
@@ -49,11 +50,13 @@ const SettingsDialog = ({
     setOvertimeToday(newOvertimeToday);
     setOvertimeTotal(tmpB);
     setIncrement(tmpIncrement);
+    setShowTimeTab(tmpShowTimeTab);
 
-    persistNumber(STORAGE_KEYS.DEFAULT_OVERTIME_TODAY, -tmpA);
-    persistNumber(STORAGE_KEYS.OVERTIME_TODAY, newOvertimeToday);
-    persistNumber(STORAGE_KEYS.OVERTIME_TOTAL, tmpB);
-    persistNumber(STORAGE_KEYS.INCREMENT, tmpIncrement);
+    set(STORAGE_KEYS.DEFAULT_OVERTIME_TODAY, -tmpA);
+    set(STORAGE_KEYS.OVERTIME_TODAY, newOvertimeToday);
+    set(STORAGE_KEYS.OVERTIME_TOTAL, tmpB);
+    set(STORAGE_KEYS.INCREMENT, tmpIncrement);
+    set(STORAGE_KEYS.SHOW_TIME_TAB, tmpShowTimeTab);
 
     toggleSettings();
   };
@@ -156,8 +159,8 @@ const SettingsDialog = ({
             Show time in tab title
             <input
               type='checkbox'
-              checked={showTimeTab}
-              onChange={(e) => setShowTimeTab(e.target.checked)}
+              checked={tmpShowTimeTab}
+              onChange={(e) => setTmpShowTimeTab(e.target.checked)}
             />
             <span className='slider'></span>
           </label>

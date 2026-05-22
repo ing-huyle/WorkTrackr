@@ -61,16 +61,16 @@ export const signedHmToSeconds = (sign: 1 | -1, h: number, m: number) => {
 
 
 // Local storage management
-export const loadNumber = (key: string, fallback: number): number => {
+export const get = (key: string, fallback: any): any => {
   const raw = localStorage.getItem(key);
   if (raw === null) return fallback;
 
-  const parsed = Number(raw);
-  return Number.isFinite(parsed) ? parsed : fallback;
+  const parsed = JSON.parse(raw);
+  return parsed ? parsed : fallback;
 };
 
-export const persistNumber = (key: string, value: number): void => {
-  localStorage.setItem(key, String(value));
+export const set = (key: string, value: any): void => {
+  localStorage.setItem(key, JSON.stringify(value));
 };
 
 

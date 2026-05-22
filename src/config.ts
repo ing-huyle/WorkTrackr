@@ -7,6 +7,7 @@ export const STORAGE_KEYS = {
   OVERTIME_TOTAL: 'overtimeTotal',
   TIME_WORKED: 'timeWorked',
   INCREMENT: 'increment',
+  SHOW_TIME_TAB: 'showTimeTab'
 } as const;
 
 export const ONE_SECOND = 1000;

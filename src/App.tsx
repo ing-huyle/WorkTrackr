@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import './styles/App.scss';
 import type { WhatsToday } from './types';
 import { ONE_SECOND, SECRET_DEFAULT_WORK_OVERTIME_TODAY, STORAGE_KEYS } from './config';
-import { getHours, getMinutes, getSeconds, getTimeColor, loadNumber, persistNumber } from './utils/utils';
+import { get, getHours, getMinutes, getSeconds, getTimeColor, set } from './utils/utils';
 import Overtime from './components/overtime/Overtime';
 import Switch from './components/switch/Switch';
 import SettingsDialog from './components/settings/Settings';
@@ -30,31 +30,35 @@ const App = () => {
     setWhatsToday(storedWhatsToday);
     localStorage.setItem(STORAGE_KEYS.WHATS_TODAY, storedWhatsToday);
 
-    const storedDefaultOvertimeToday = loadNumber(
+    const storedDefaultOvertimeToday = get(
       STORAGE_KEYS.DEFAULT_OVERTIME_TODAY,
       SECRET_DEFAULT_WORK_OVERTIME_TODAY
     );
     setDefaultOvertimeToday(storedDefaultOvertimeToday);
-    persistNumber(STORAGE_KEYS.DEFAULT_OVERTIME_TODAY, storedDefaultOvertimeToday);
+    set(STORAGE_KEYS.DEFAULT_OVERTIME_TODAY, storedDefaultOvertimeToday);
 
-    const initialOvertimeToday = loadNumber(
+    const initialOvertimeToday = get(
       STORAGE_KEYS.OVERTIME_TODAY,
       storedWhatsToday === 'work' ? storedDefaultOvertimeToday : 0
     );
     setOvertimeToday(initialOvertimeToday);
-    persistNumber(STORAGE_KEYS.OVERTIME_TODAY, initialOvertimeToday);
+    set(STORAGE_KEYS.OVERTIME_TODAY, initialOvertimeToday);
 
-    const initialOvertimeTotal = loadNumber(STORAGE_KEYS.OVERTIME_TOTAL, overtimeTotal);
+    const initialOvertimeTotal = get(STORAGE_KEYS.OVERTIME_TOTAL, overtimeTotal);
     setOvertimeTotal(initialOvertimeTotal);
-    persistNumber(STORAGE_KEYS.OVERTIME_TOTAL, initialOvertimeTotal);
+    set(STORAGE_KEYS.OVERTIME_TOTAL, initialOvertimeTotal);
 
-    const initialTimeWorked = loadNumber(STORAGE_KEYS.TIME_WORKED, 0);
+    const initialTimeWorked = get(STORAGE_KEYS.TIME_WORKED, 0);
     setTimeWorked(initialTimeWorked);
-    persistNumber(STORAGE_KEYS.TIME_WORKED, initialTimeWorked);
+    set(STORAGE_KEYS.TIME_WORKED, initialTimeWorked);
 
-    const storedIncrement = loadNumber(STORAGE_KEYS.INCREMENT, 15);
+    const storedIncrement = get(STORAGE_KEYS.INCREMENT, 15);
     setIncrement(storedIncrement);
-    persistNumber(STORAGE_KEYS.INCREMENT, storedIncrement);
+    set(STORAGE_KEYS.INCREMENT, storedIncrement);
+
+    const storedShowTimeTab = get(STORAGE_KEYS.SHOW_TIME_TAB, false);
+    setIncrement(storedShowTimeTab);
+    set(STORAGE_KEYS.SHOW_TIME_TAB, storedShowTimeTab);
 
     baseTitleRef.current = document.title;
 
@@ -67,19 +71,19 @@ const App = () => {
   const applyDelta = useCallback((deltaSeconds: number) => {
     setOvertimeToday(prev => {
       const value = prev + deltaSeconds;
-      persistNumber(STORAGE_KEYS.OVERTIME_TODAY, value);
+      set(STORAGE_KEYS.OVERTIME_TODAY, value);
       return value;
     });
 
     setOvertimeTotal(prev => {
       const value = prev + deltaSeconds;
-      persistNumber(STORAGE_KEYS.OVERTIME_TOTAL, value);
+      set(STORAGE_KEYS.OVERTIME_TOTAL, value);
       return value;
     });
 
     setTimeWorked(prev => {
       const value = Math.max(0, prev + deltaSeconds);
-      persistNumber(STORAGE_KEYS.TIME_WORKED, value);
+      set(STORAGE_KEYS.TIME_WORKED, value);
       return value;
     });
   }, []);
@@ -179,12 +183,12 @@ const App = () => {
 
     const newOvertimeToday = type === 'rest' ? 0 : defaultOvertimeToday;
     setOvertimeToday(newOvertimeToday);
-    persistNumber(STORAGE_KEYS.OVERTIME_TODAY, newOvertimeToday);
+    set(STORAGE_KEYS.OVERTIME_TODAY, newOvertimeToday);
 
     setOvertimeTotal(prev => {
       const adjustment = type === 'rest' ? -defaultOvertimeToday : defaultOvertimeToday;
       const value = prev + adjustment;
-      persistNumber(STORAGE_KEYS.OVERTIME_TOTAL, value);
+      set(STORAGE_KEYS.OVERTIME_TOTAL, value);
       return value;
     });
   };
@@ -193,16 +197,16 @@ const App = () => {
     const newOvertimeToday = whatsToday === 'rest' ? 0 : defaultOvertimeToday;
 
     setOvertimeToday(newOvertimeToday);
-    persistNumber(STORAGE_KEYS.OVERTIME_TODAY, newOvertimeToday);
+    set(STORAGE_KEYS.OVERTIME_TODAY, newOvertimeToday);
 
     setOvertimeTotal(prev => {
       const value = prev + newOvertimeToday;
-      persistNumber(STORAGE_KEYS.OVERTIME_TOTAL, value);
+      set(STORAGE_KEYS.OVERTIME_TOTAL, value);
       return value;
     });
 
     setTimeWorked(0);
-    persistNumber(STORAGE_KEYS.TIME_WORKED, 0);
+    set(STORAGE_KEYS.TIME_WORKED, 0);
   };
 
 
