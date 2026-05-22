@@ -17,7 +17,7 @@ const App = () => {
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [increment, setIncrement] = useState<number>(15);
   const [isSettingsOn, setIsSettingsOn] = useState(false);
-  const [showTimeTab, setShowTimeTab] = useState(true);
+  const [showTimeTab, setShowTimeTab] = useState(false);
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const lastSyncRef = useRef<number | null>(null);
@@ -57,7 +57,7 @@ const App = () => {
     set(STORAGE_KEYS.INCREMENT, storedIncrement);
 
     const storedShowTimeTab = get(STORAGE_KEYS.SHOW_TIME_TAB, false);
-    setIncrement(storedShowTimeTab);
+    setShowTimeTab(storedShowTimeTab);
     set(STORAGE_KEYS.SHOW_TIME_TAB, storedShowTimeTab);
 
     baseTitleRef.current = document.title;
