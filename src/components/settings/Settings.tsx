@@ -21,7 +21,8 @@ const SettingsDialog = ({
     setTmpA(-defaultOvertimeToday);
     setTmpB(overtimeTotal);
     setTmpIncrement(increment);
-  }, [isOpen, defaultOvertimeToday, overtimeTotal, increment]);
+    setTmpShowTimeTab(showTimeTab);
+  }, [isOpen, defaultOvertimeToday, overtimeTotal, increment, showTimeTab]);
 
   // Derived display values
   const aHM = useMemo(() => splitSecondsToHm(tmpA), [tmpA]);
